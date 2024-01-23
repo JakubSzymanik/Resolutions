@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Resolutions.Server.Data;
+using Resolutions.Server.Middleware;
 using Resolutions.Server.Model;
 using Resolutions.Server.Services;
 using System.Text;
@@ -61,8 +62,11 @@ builder.Services.AddSwaggerGen();
 //DI
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IResolutionsService, ResolutionsService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

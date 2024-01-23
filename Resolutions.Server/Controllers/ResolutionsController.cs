@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Resolutions.Server.Model;
@@ -15,11 +16,13 @@ namespace Resolutions.Server.Controllers
     {
         UserManager<AppUser> _userManager;
         IResolutionsService _resolutionService;
+        private readonly IMapper _mapper;
 
-        public ResolutionsController(UserManager<AppUser> userManager, IResolutionsService resolutionService)
+        public ResolutionsController(UserManager<AppUser> userManager, IResolutionsService resolutionService, IMapper mapper)
         {
             _userManager = userManager;
             _resolutionService = resolutionService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -35,6 +38,14 @@ namespace Resolutions.Server.Controllers
             return Ok(resolutions.Select(v => new ResolutionDTO() { Name = v.Name, Id = v.Id})); //MAPPER
         }
 
+        [HttpGet] 
+        public async Task<ActionResult<ResolutionDTO>> GetResolution(int id)
+        {
+            var resolution = await _resolutionService.GetResolutionByID(id);
+            if (resolution == null) return BadRequest("Resolution with this id does not exist");
+            return _mapper.Map<ResolutionDTO>(resolution); ; //MAPPER
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateResolution
             (ResolutionCreateDTO resolution)
@@ -48,16 +59,9 @@ namespace Resolutions.Server.Controllers
                 return BadRequest("User alredy has a resolution with this name");
 
             var createdResolution = await _resolutionService.CreateResolution(resolution, user);
-            var createdResolutionDTO = new ResolutionDTO() { Id = createdResolution.Id, Name = createdResolution.Name }; //MAPPER
+            //var createdResolutionDTO = new ResolutionDTO() { Id = createdResolution.Id, Name = createdResolution.Name }; //MAPPER
+            var createdResolutionDTO = _mapper.Map<ResolutionDTO>(createdResolution);
             return CreatedAtAction(nameof(GetResolution), new { id = createdResolution.Id }, createdResolution);
-        }
-
-        [HttpGet] 
-        public async Task<ActionResult<ResolutionDTO>> GetResolution(int id)
-        {
-            var resolution = await _resolutionService.GetResolutionByID(id);
-            if (resolution == null) return BadRequest("Resolution with this id does not exist");
-            return new ResolutionDTO() { Name = resolution.Name }; //MAPPER
         }
 
         [HttpDelete]

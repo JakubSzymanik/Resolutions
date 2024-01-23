@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Resolutions.Server.Model;
 
 namespace Resolutions.Server.Controllers
 {
@@ -18,6 +19,13 @@ namespace Resolutions.Server.Controllers
         public ActionResult<string> GetTestNonAuthorized()
         {
             return Ok("Success");
+        }
+
+        [HttpGet]
+        public ActionResult<string> GetNulLRef()
+        {
+            ResolutionDTO res = null;
+            return res.Name;
         }
     }
 }
