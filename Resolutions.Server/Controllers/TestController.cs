@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Resolutions.Server.Model;
+using Resolutions.Server.Model.DTOs;
 
 namespace Resolutions.Server.Controllers
 {

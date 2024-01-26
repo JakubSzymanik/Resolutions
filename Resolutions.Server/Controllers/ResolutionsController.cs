@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using Resolutions.Server.Errors;
 using Resolutions.Server.Model;
+using Resolutions.Server.Model.DTOs;
 using Resolutions.Server.Services;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
@@ -58,18 +60,21 @@ namespace Resolutions.Server.Controllers
             if (nameExists)
                 return BadRequest("User alredy has a resolution with this name");
 
-            var createdResolution = await _resolutionService.CreateResolution(resolution, user);
-            //var createdResolutionDTO = new ResolutionDTO() { Id = createdResolution.Id, Name = createdResolution.Name }; //MAPPER
-            var createdResolutionDTO = _mapper.Map<ResolutionDTO>(createdResolution);
-            return CreatedAtAction(nameof(GetResolution), new { id = createdResolution.Id }, createdResolution);
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> DeleteResolution(int id)
-        {
-            int result = await _resolutionService.DeleteResolution(id);
-            if (result > 0) return Ok();
-            else return NotFound();
+            try
+            {
+                var createdResolution = await _resolutionService.CreateResolution(resolution, user);
+                var createdResolutionDTO = _mapper.Map<ResolutionDTO>(createdResolution);
+                return CreatedAtAction(nameof(GetResolution), new { id = createdResolution.Id }, createdResolutionDTO);
+            } 
+            catch(CriticalBussinessLogicException ex)
+            {
+                //log error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            catch(LimitExceededException ex)
+            {
+                return BadRequest(ex.Message);
+            } 
         }
 
         [HttpPost]
@@ -84,6 +89,14 @@ namespace Resolutions.Server.Controllers
                 return BadRequest("Resolution does not exist");
 
             return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteResolution(int id)
+        {
+            int result = await _resolutionService.DeleteResolution(id);
+            if (result > 0) return Ok();
+            else return NotFound();
         }
     }
 }

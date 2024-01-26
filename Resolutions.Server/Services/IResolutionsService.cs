@@ -1,15 +1,17 @@
 ﻿using Resolutions.Server.Model;
+using Resolutions.Server.Model.DTOs;
 
 namespace Resolutions.Server.Services
 {
     public interface IResolutionsService
     {
-        Task<Resolution> CreateResolution(ResolutionCreateDTO resolution, AppUser user);
         Task<IEnumerable<Resolution>> GetUserResolutions(AppUser user);
         Task<Resolution> GetResolutionByID(int id);
-        public Task<int> DeleteResolution(int id);
-        public Task<bool> UserResolutionExists(AppUser user, string name);
-        public Task<bool> ResolutionExists(int id);
-        public Task<Resolution> EditResolution(Resolution resolution);
+        Task<bool> UserResolutionExists(AppUser user, string name);
+        Task<bool> ResolutionExists(int id);
+        Task<int> GetUserResolutionCount(AppUser user);
+        Task<Resolution> CreateResolution(ResolutionCreateDTO resolution, AppUser user); //do poprawy, dać w argumencie model
+        Task<Resolution> EditResolution(Resolution resolution);
+        Task<int> DeleteResolution(int id);
     }
 }

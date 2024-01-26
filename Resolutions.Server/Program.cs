@@ -62,7 +62,10 @@ builder.Services.AddSwaggerGen();
 //DI
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IResolutionsService, ResolutionsService>();
+builder.Services.AddScoped<IBussinessConfigurationConstantsService, BussinessConfigurationConstantsService>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+//DI
 
 var app = builder.Build();
 

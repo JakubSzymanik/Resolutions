@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Resolutions.Server.Model
+namespace Resolutions.Server.Model.DTOs
 {
     public class ResolutionCreateDTO
     {

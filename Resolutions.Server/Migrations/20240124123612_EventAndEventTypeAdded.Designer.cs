@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Resolutions.Server.Data;
 
@@ -11,9 +12,11 @@ using Resolutions.Server.Data;
 namespace Resolutions.Server.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240124123612_EventAndEventTypeAdded")]
+    partial class EventAndEventTypeAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,31 +223,6 @@ namespace Resolutions.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Resolutions.Server.Model.BussinessConfigurationConstant", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("ConfigurationConstants");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "MaxResolutionsPerUser",
-                            Value = 3
-                        },
-                        new
-                        {
-                            Name = "MaxEventTypesPerResolution",
-                            Value = 3
-                        });
-                });
-
             modelBuilder.Entity("Resolutions.Server.Model.Resolution", b =>
                 {
                     b.Property<int>("Id")
@@ -309,12 +287,7 @@ namespace Resolutions.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ResolutionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ResolutionId");
 
                     b.ToTable("EventTypes");
                 });
@@ -394,15 +367,6 @@ namespace Resolutions.Server.Migrations
                     b.Navigation("ResolutionEventType");
                 });
 
-            modelBuilder.Entity("Resolutions.Server.Model.ResolutionEventType", b =>
-                {
-                    b.HasOne("Resolutions.Server.Model.Resolution", null)
-                        .WithMany("ResolutionEventTypes")
-                        .HasForeignKey("ResolutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Resolutions.Server.Model.AppUser", b =>
                 {
                     b.Navigation("Resolutions");
@@ -410,8 +374,6 @@ namespace Resolutions.Server.Migrations
 
             modelBuilder.Entity("Resolutions.Server.Model.Resolution", b =>
                 {
-                    b.Navigation("ResolutionEventTypes");
-
                     b.Navigation("ResolutionEvents");
                 });
 #pragma warning restore 612, 618

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Resolutions.Server.Model;
+using Resolutions.Server.Model.DTOs;
 
 namespace Resolutions.Server.Helpers
 {

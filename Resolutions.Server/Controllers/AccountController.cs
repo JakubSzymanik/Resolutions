@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Resolutions.Server.Model;
+using Resolutions.Server.Model.DTOs;
 using Resolutions.Server.Services;
 
 namespace Resolutions.Server.Controllers

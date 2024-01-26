@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Resolutions.Server.Data;
 
@@ -11,9 +12,11 @@ using Resolutions.Server.Data;
 namespace Resolutions.Server.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240125121216_ResolutionEventConnectedToResolution")]
+    partial class ResolutionEventConnectedToResolution
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,31 +221,6 @@ namespace Resolutions.Server.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Resolutions.Server.Model.BussinessConfigurationConstant", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("ConfigurationConstants");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "MaxResolutionsPerUser",
-                            Value = 3
-                        },
-                        new
-                        {
-                            Name = "MaxEventTypesPerResolution",
-                            Value = 3
-                        });
                 });
 
             modelBuilder.Entity("Resolutions.Server.Model.Resolution", b =>
